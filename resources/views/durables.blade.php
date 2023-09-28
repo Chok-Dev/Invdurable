@@ -28,7 +28,7 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    ทะเบียนครุภัณฑ์d
+                    ทะเบียนครุภัณฑ์
                 </div>
                 <div>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">เพิ่ม</button>
