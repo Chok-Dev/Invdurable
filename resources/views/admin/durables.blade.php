@@ -24,7 +24,6 @@
 
     </div>
     <div class="card">
-
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
