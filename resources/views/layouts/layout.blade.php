@@ -144,7 +144,7 @@
                     <!-- Cards -->
                     <li class="menu-item @if (request()->routeIs('durables')) active @endif">
                         <a href="{{ route('durables') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-collection"></i>
+                            <i class='menu-icon tf-icons bx bx-list-ul' ></i>
                             <div data-i18n="Basic">ทะเบียนครุภัณฑ์</div>
                         </a>
                     </li>
@@ -160,24 +160,41 @@
                     @endphp
                     <li class="menu-item @if (request()->routeIs('repair')) active @endif">
                         <a href="{{ route('repair') }}" class="menu-link ">
-                            <i class="menu-icon tf-icons bx bx-collection"></i>
+                            <i class='menu-icon tf-icons bx bx-laptop'></i>
                             <div data-i18n="Basic">แจ้งซ่อมครุภัณฑ์</div>
                             @empty($notify)
                             @else
-                            <div class="badge bg-danger rounded-pill ms-auto">{{ $notify }}</div>
+                            <div class="badge bg-danger rounded-pill ms-auto"><i class='bx bxs-bell-ring bx-tada bx-xs'></i> {{ $notify }}</div>
                             @endempty
                             
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="cards-basic.html" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-collection"></i>
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class='menu-icon tf-icons bx bxs-report' ></i>
                             <div data-i18n="Basic">รายงาน</div>
                         </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="" class="menu-link">
+                                    <div data-i18n="">รายงาน 1</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="" class="menu-link">
+                                    <div data-i18n="">รายงาน 2</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="" class="menu-link">
+                                    <div data-i18n="">รายงาน 3</div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                            <i class='menu-icon tf-icons bx bx-cog'></i>
                             <div data-i18n="ตั้งค่า">ตั้งค่า</div>
                         </a>
                         <ul class="menu-sub">
@@ -205,7 +222,7 @@
                     <!-- Tables -->
                     <li class="menu-item @if (request()->routeIs('fix')) active @endif">
                         <a href="{{ route('fix') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-table"></i>
+                            <i class='menu-icon tf-icons bx bx-laptop'></i>
                             <div data-i18n="Tables">แจ้งซ่อมครุภัณฑ์</div>
                         </a>
 
@@ -262,8 +279,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
-                                                        <small class="text-muted">{{ Auth::user()->role }}</small>
+                                                        <span class="fw-semibold d-block text-uppercase">{{ Auth::user()->name }}</span>
+                                                        <small class="text-muted text-uppercase">{{ Auth::user()->role }}</small>
                                                     </div>
                                                 </div>
                                             </a>
@@ -297,12 +314,9 @@
                                         <div class="dropdown-divider"></div>
                                     </li> --}}
                                         <li>
-                                            <a class="dropdown-item" href=""
-                                                onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
-                                                <i class="bx bx-power-off me-2"></i>
-                                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                    class="d-none">
+                                            <a class="dropdown-item" href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="menu-icon tf-icons bx bx-power-off me-2"></i>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                                     @csrf
                                                 </form>
                                                 <span class="align-middle">ออกจากระบบ</span>
