@@ -57,7 +57,7 @@
                                         <div class="p-1">{!! QrCode::size(50)->generate(url('fix?id=') . $commo->id) !!}</div>
                                         <div class="">
                                             <div class="col col-auto">
-                                                <p class="mb-1 text-nowrap" style="font-size: 8px">ID: {{ $commo->id }}</p>
+                                                <p class="mb-1 text-nowrap" style="font-size: 8px">รหัส: {{ $commo->id }}</p>
                                                 <p class="mb-1 text-nowrap" style="font-size: 8px">ประเภท:
                                                     {{ $commo->com_type_name }}</p>
                                                 <p class="mb-1 text-nowrap" style="font-size: 8px">หน่วยงาน:
