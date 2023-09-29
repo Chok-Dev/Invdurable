@@ -36,7 +36,7 @@ class DurableController extends Controller
 
         ]);
 
-        return $pdf->stream('qrcode.pdf');
+        return $pdf->stream("$id.pdf");
     }
     public function index()
     {

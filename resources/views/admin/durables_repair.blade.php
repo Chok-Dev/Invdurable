@@ -394,7 +394,7 @@
 
                 }).buttons()
                 .container()
-                .appendTo("#tt");;
+                .appendTo("#tt");
 
         });
     </script>
