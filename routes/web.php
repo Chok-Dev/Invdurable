@@ -3,6 +3,7 @@
 use App\Http\Controllers\DurableController;
 use App\Http\Controllers\FixController;
 use App\Http\Controllers\RepairController;
+use App\Livewire\Setting\DurableType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,3 +49,6 @@ Route::controller(FixController::class)->group(function () {
     Route::get('/fix', 'index')->name('fix');
     Route::post('/fix', 'fix')->name('fix1');
 });
+
+
+Route::get('type', DurableType::class)->name('rrr');
