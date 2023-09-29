@@ -51,7 +51,7 @@ class FixController extends Controller
                 ->select('doctor.name', 'opduser.loginname', 'emp.emp_id', 'emp.emp_dep_id')->first();
 /* dd($user); */
             $com = DB::connection('pgsql')->table('inv_durable_good')
-                ->where('inv_durable_good_code', $commo->durable_id??$ser->v_id)
+                ->where('inv_durable_good_code', ($commo->durable_id == "-") ? $ser->v_id : $commo->durable_id)
                 ->select('inv_durable_good_id')->first();
 
             $number = DB::connection('pgsql')->table('inv_durable_good_repair')

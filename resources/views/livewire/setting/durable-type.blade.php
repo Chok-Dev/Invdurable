@@ -1,7 +1,5 @@
 <div>
-    @include('sweetalert::alert')
     <div class="d-flex justify-content-end align-items-center mb-4" id="tt">
-
     </div>
     <div class="card">
         <h5 class="card-header">
@@ -10,7 +8,7 @@
                     ประเภทครุภัณฑ์
                 </div>
                 <div>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">เพิ่ม</button>
+                    <button wire:click='resetinput' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#StoreModal">เพิ่ม</button>
                 </div>
             </div>
         </h5>
@@ -25,6 +23,7 @@
                             <th class="text-center">ลำดับ</th>
                             {{-- <th class="text-center">รหัส</th> --}}
                             <th class="text-center text-nowrap">ประเภทครุภัณฑ์</th>
+                            <th class="text-center text-nowrap">เลขครุภัณฑ์</th>
                             <th class="text-center text-nowrap">จัดการ</th>
                     </thead>
 
@@ -32,12 +31,15 @@
                         @foreach ($data as $commo)
                             <tr class="text-nowrap">
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $commo->com_type_name }}</td>
+                                <td>{{ $commo->service_list_name }}</td>
+                                <td>{{ $commo->v_id }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->com_type_id }}')" class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal1" >แก้ไข</button>
-                                        <button class="btn btn-danger btn-sm" data-confirm-delete="true">ลบ</button>
+                                        <button wire:click="EditDurable('{{ $commo->service_list_id  }}')"
+                                            class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#EditModal">แก้ไข</button>
+                                        <button wire:click.prevent="DelDurable({{ $commo->service_list_id  }})"
+                                            class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
                             </tr>
@@ -49,21 +51,31 @@
     </div>
 
 
-    <div wire:ignore.self class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade" data-bs-backdrop="static" id="StoreModal" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มครุภัณฑ์</h1>
+                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มประเภทครุภัณฑ์</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form wire:submit.prevent='storeDurableData'>
                         <div class="form-floating mb-3">
                             <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
-                                id="durable_type" wire:model.blur="durable_type" placeholder="">
+                                id="durable_type" wire:model="durable_type" placeholder="">
                             <label for="name" class="text-dark">ประเภทครุภัณฑ์</label>
                             @error('durable_type')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="input" class="form-control  @error('durable_vid') is-invalid @enderror"
+                                id="durable_vid" wire:model="durable_vid" placeholder="">
+                            <label for="name" class="text-dark">เลขครุภัณฑ์</label>
+                            @error('durable_vid')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -80,7 +92,7 @@
         </div>
     </div>
     {{-- edit --}}
-    <div wire:ignore.self class="modal fade" data-bs-backdrop="static" id="exampleModal1" tabindex="-1"
+    <div wire:ignore.self class="modal fade" data-bs-backdrop="static" id="EditModal" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -92,9 +104,19 @@
                     <form wire:submit.prevent='EditDurableData'>
                         <div class="form-floating mb-3">
                             <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
-                                id="durable_type" wire:model.blur="durable_type" placeholder="">
+                                id="durable_type" wire:model="durable_type" placeholder="">
                             <label for="name" class="text-dark">ประเภทครุภัณฑ์</label>
                             @error('durable_type')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="input" class="form-control  @error('durable_vid') is-invalid @enderror"
+                                id="durable_vid" wire:model="durable_vid" placeholder="">
+                            <label for="name" class="text-dark">เลขครุภัณฑ์</label>
+                            @error('durable_vid')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -119,101 +141,119 @@
         document.addEventListener('datatable', event => {
             $(document).ready(function() {
                 $('#datatable1').DataTable({
-                        stateSave: true,
-                        stateSaveCallback: function(settings, data) {
-                            localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(
-                                data))
-                        },
-                        stateLoadCallback: function(settings) {
-                            return JSON.parse(localStorage.getItem('DataTables_' + settings
-                                .sInstance))
-                        },
-                        initComplete: function() {
-                            this.api()
-                                .columns([1])
-                                .every(function() {
-                                    var column = this;
-                                    var select = $(
-                                        '<select class="form-select mx-2"><option value="">' +
-                                        column
-                                        .header().textContent +
-                                        ' (ทั้งหมด)</option></select>'
-                                    ).appendTo('#userstable_filter').on('change',
-                                        function() {
-                                            var val = $.fn.dataTable.util.escapeRegex($(
-                                                this).val());
-
-                                            column.search(val ? '^' + val + '$' : '', true,
-                                                false).draw();
-                                        });
-
+                    stateSave: true,
+                    stateSaveCallback: function(settings, data) {
+                        localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(
+                            data))
+                    },
+                    stateLoadCallback: function(settings) {
+                        return JSON.parse(localStorage.getItem('DataTables_' + settings
+                            .sInstance))
+                    },
+                    initComplete: function() {
+                        this.api()
+                            .columns([1])
+                            .every(function() {
+                                var column = this;
+                                var select = $(
+                                    '<select class="form-select mx-2"><option value="">' +
                                     column
-                                        .data()
-                                        .unique()
-                                        .sort()
-                                        .each(function(d, j) {
-                                            select.append('<option>' + d + '</option>');
-                                        });
-                                });
+                                    .header().textContent +
+                                    ' (ทั้งหมด)</option></select>'
+                                ).appendTo('#userstable_filter').on('change',
+                                    function() {
+                                        var val = $.fn.dataTable.util.escapeRegex($(
+                                            this).val());
+
+                                        column.search(val ? '^' + val + '$' : '', true,
+                                            false).draw();
+                                    });
+
+                                column
+                                    .data()
+                                    .unique()
+                                    .sort()
+                                    .each(function(d, j) {
+                                        select.append('<option>' + d + '</option>');
+                                    });
+                            });
+                    },
+                    "language": {
+                        "sProcessing": "กำลังดำเนินการ...",
+                        "sLengthMenu": "แสดง_MENU_ แถว",
+                        "sZeroRecords": "ไม่พบข้อมูล",
+                        "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                        "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
+                        "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
+                        "sInfoPostFix": "",
+                        "sSearch": "ค้นหา:",
+                        "sUrl": "",
+
+                        "oPaginate": {
+                            "sFirst": "เริ่มต้น",
+                            "sPrevious": "ก่อนหน้า",
+                            "sNext": "ถัดไป",
+                            "sLast": "สุดท้าย"
+                        }
+                    },
+                    "dom": "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    "buttons": [{
+                            "extend": 'copy',
+                            "charset": 'utf-8',
+                            "className": 'btn btn-dark'
                         },
-                        "language": {
-                            "sProcessing": "กำลังดำเนินการ...",
-                            "sLengthMenu": "แสดง_MENU_ แถว",
-                            "sZeroRecords": "ไม่พบข้อมูล",
-                            "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-                            "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
-                            "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
-                            "sInfoPostFix": "",
-                            "sSearch": "ค้นหา:",
-                            "sUrl": "",
+                        {
+                            "extend": 'excel',
+                            "exportOptions": {
+                                "stripHtml": false,
+                                'columns': [1]
 
-                            "oPaginate": {
-                                "sFirst": "เริ่มต้น",
-                                "sPrevious": "ก่อนหน้า",
-                                "sNext": "ถัดไป",
-                                "sLast": "สุดท้าย"
-                            }
+                            },
+                            "charset": 'utf-8',
+                            "className": 'btn btn-dark'
                         },
-                        "dom": "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
-                            "<'row'<'col-sm-12'tr>>" +
-                            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                        "buttons": [{
-                                "extend": 'copy',
-                                "charset": 'utf-8',
-                                "className": 'btn btn-dark'
+                        {
+                            "extend": 'print',
+                            "exportOptions": {
+                                "stripHtml": false,
+                                'columns': [1]
+
                             },
-                            {
-                                "extend": 'excel',
-                                "exportOptions": {
-                                    "stripHtml": false,
-                                    'columns': [1]
+                            "charset": 'utf-8',
+                            "className": 'btn btn-dark'
+                        },
 
-                                },
-                                "charset": 'utf-8',
-                                "className": 'btn btn-dark'
-                            },
-                            {
-                                "extend": 'print',
-                                "exportOptions": {
-                                    "stripHtml": false,
-                                    'columns': [1]
+                    ]
 
-                                },
-                                "charset": 'utf-8',
-                                "className": 'btn btn-dark'
-                            },
-
-                        ]
-
-                    }).rows().invalidate('data').draw(false).buttons().container().appendTo("#tt");
+                }).rows().invalidate('data').draw(false).buttons().container().appendTo("#tt");
             });
         });
         document.addEventListener('close-modal', event => {
-            $('#exampleModal').modal('hide');
-            $('#exampleModal1').modal('hide');
+            $('#StoreModal').modal('hide');
+            $('#EditModal').modal('hide');
+            
         });
         document.addEventListener('show-modal-edit', event => {
-            $('#exampleModal1').modal('show');
+            $('#EditModal').modal('show');
+        });
+        document.addEventListener('al-del', event => {
+            Swal.fire({
+                title: 'คุณแน่ใจที่จะลบหรือไหม?',
+                text: "เมื่อลบแล้วไม่สามารถย้อนกลับได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ตกลง!',
+                cancelButtonText: 'ยกเลิก!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    @this.dispatch('DeleteConfirm');
+                }
+            })
         });
     </script>
 @endpush

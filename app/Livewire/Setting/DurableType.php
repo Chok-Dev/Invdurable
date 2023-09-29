@@ -7,76 +7,101 @@ use Illuminate\Support\Facades\DB;
 
 class DurableType extends Component
 {
-    /* protected $listeners = ['close-modal' => '$refresh']; */
-    public $durable_type, $durable_id;
+    protected $listeners = ['DeleteConfirm' => 'DelDurableData'];
+    public $durable_type, $durable_id,$durable_vid;
 
-    public function updated($fields)
-    {
-        $this->dispatch('datatable');
-        $this->validateOnly($fields, [
-            'durable_type' => 'required',
-        ]);
+   
+    public function resetinput(){
+        $this->durable_id = '';
+        $this->durable_type = '';
+        $this->durable_vid ='';
     }
-
     public function storeDurableData()
     {
-
-        $this->dispatch('datatable');
         $this->validate([
             'durable_type' => 'required',
+            'durable_vid' => 'required|unique:com_service_list,v_id',
+        ],
+        [
+            'durable_type.required' => '* กรุณากรอกข้อมูลให้ครบถ้วน',
+            'durable_vid.required' => '* กรุณากรอกข้อมูลให้ครบถ้วน',
+            'durable_vid.unique' => '* เลขครุภัณฑ์นี้ถูกใช้งานไปแล้ว',
+          
         ]);
 
-        $save = DB::table('com_type')->insert([
-            'com_type_name' => $this->durable_type,
+        $save = DB::table('com_service_list')->insert([
+            'service_list_name' => $this->durable_type,
+            'v_id' => $this->durable_vid,
         ]);
-
-        $this->durable_type = '';
         $this->dispatch('close-modal');
+        $this->durable_id = '';
+        $this->durable_type = '';
+        $this->durable_vid ='';
     }
 
     public function EditDurable($id)
     {
         
-        $this->dispatch('datatable');
         $this->durable_id = '';
         $this->durable_type = '';
-        $data = DB::table('com_type')->where('com_type_id', $id)->first();
-        /* dd($data); */
-        $this->durable_type = $data->com_type_name;
-        $this->durable_id = $data->com_type_id;
+        $data = DB::table('com_service_list')->where('service_list_id', $id)->first();
+        $this->durable_type = $data->service_list_name;
+        $this->durable_vid = $data->v_id;
+        $this->durable_id = $data->service_list_id;
         $this->dispatch('show-modal-edit');
     }
 
     public function EditDurableData()
     {
-        $this->dispatch('datatable');
         $this->validate([
             'durable_type' => 'required',
+            'durable_vid' => 'required|unique:com_service_list,v_id,'.$this->durable_id.',service_list_id',
+        ],
+        [
+            'durable_type.required' => '* กรุณากรอกข้อมูลให้ครบถ้วน',
+            'durable_vid.required' => '* กรุณากรอกข้อมูลให้ครบถ้วน',
+            'durable_vid.unique' => '* เลขครุภัณฑ์นี้ถูกใช้งานไปแล้ว',
+          
         ]);
-
-        $data = DB::table('com_type')
-            ->where('com_type_id', $this->durable_id)
+        
+        $data = DB::table('com_service_list')
+            ->where('service_list_id', $this->durable_id)
             ->update(array(
-                'com_type_name' => $this->durable_type,
+                'service_list_name' => $this->durable_type,
+                'v_id' => $this->durable_vid,
             ));
         $this->durable_id = '';
         $this->durable_type = '';
+        $this->durable_vid ='';
         $this->dispatch('close-modal');
+        
     }
-    
-    public function mount()
+    public function DelDurable($id)
     {
+        $data = DB::table('com_service_list')->where('service_list_id', $id)->first();
+        $this->durable_type = $data->service_list_name;
+        $this->durable_id = $data->service_list_id;
+        $this->dispatch('al-del');
+    }
+    public function DelDurableData()
+    {
+        DB::table('com_service_list')->where('service_list_id', '=', $this->durable_id)->delete();
         $this->durable_id = '';
         $this->durable_type = '';
+        
+    }
+   
+    public function boot()
+    {
         $this->dispatch('datatable');
     }
-
     public function render()
     {
+       
         $title = 'ลบครุภัณฑ์!';
         $text = "คุณแน่ใจที่จะลบหรือไหม?";
         confirmDelete($title, $text);
-        $data = DB::table('com_type')->orderByDesc('com_type_id')->get();
+        $data = DB::table('com_service_list')->orderByDesc('service_list_id')->get();
         return view('livewire.setting.durable-type', ['data' => $data])->layout('livewire.setting.base');
     }
 }
