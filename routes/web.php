@@ -3,6 +3,7 @@
 use App\Http\Controllers\DurableController;
 use App\Http\Controllers\FixController;
 use App\Http\Controllers\RepairController;
+use App\Livewire\Setting\DurableService;
 use App\Livewire\Setting\DurableType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,9 @@ Route::middleware(['auth', 'user-role:Admin'])->group(function () {
         Route::delete('/daruble_del/{id}', 'destroy')->name('daruble_del');
         Route::get('/durables_qrcode', 'durables_qrcode')->name('durables_qrcode');
         Route::get('/pdf/{id}', 'pdf')->name('pdf');
+
+
+        Route::get('setting_serviece', DurableService::class)->name('setting_serviece');
     });
 
     Route::controller(RepairController::class)->group(function () {
@@ -51,4 +55,3 @@ Route::controller(FixController::class)->group(function () {
 });
 
 
-Route::get('type', DurableType::class)->name('rrr');

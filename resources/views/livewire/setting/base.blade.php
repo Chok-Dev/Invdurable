@@ -1,11 +1,11 @@
 @extends('layouts.layout');
 
 @section('title')
-
+{{ $title ?? 'ตั้งค่า' }}
 @endsection
 
 @section('header')
-
+{{ $title ?? 'ตั้งค่า' }}
 @endsection
 
 @section('css')

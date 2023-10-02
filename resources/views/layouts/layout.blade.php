@@ -192,20 +192,20 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item @if (request()->routeIs('setting_serviece')) open active @endif">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class='menu-icon tf-icons bx bx-cog'></i>
                             <div data-i18n="ตั้งค่า">ตั้งค่า</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="" class="menu-link">
-                                    <div data-i18n="ประเภทครุภัณฑ์">ประเภทครุภัณฑ์</div>
+                            <li class="menu-item @if (request()->routeIs('setting_serviece')) active @endif">
+                                <a href="{{ route('setting_serviece') }}" class="menu-link">
+                                    <div data-i18n="ประเภทครุภัณฑ์">ปัญหา</div>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="" class="menu-link">
-                                    <div data-i18n="ปัญหา">ปัญหา</div>
+                                    <div data-i18n="ปัญหา">ประเภทครุภัณฑ์</div>
                                 </a>
                             </li>
                             <li class="menu-item">

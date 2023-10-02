@@ -5,15 +5,17 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    ประเภทครุภัณฑ์
+                    ปัญหาครุภัณฑ์
                 </div>
                 <div>
-                    <button wire:click='resetinput' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#StoreModal">เพิ่ม</button>
+                    <button wire:click='resetinput' class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#StoreModal">เพิ่ม</button>
                 </div>
             </div>
         </h5>
         <div class="card-body">
             <div class="d-inline-flex  mb-3" id="userstable_filter">
+
             </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-bordered text-center table-striped" id="datatable1">
@@ -22,7 +24,7 @@
                         <tr>
                             <th class="text-center">ลำดับ</th>
                             {{-- <th class="text-center">รหัส</th> --}}
-                            <th class="text-center text-nowrap">ประเภทครุภัณฑ์</th>
+                            <th class="text-center text-nowrap">ปัญหาครุภัณฑ์</th>
                             <th class="text-center text-nowrap">เลขครุภัณฑ์</th>
                             <th class="text-center text-nowrap">จัดการ</th>
                     </thead>
@@ -35,10 +37,10 @@
                                 <td>{{ $commo->v_id }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->service_list_id  }}')"
+                                        <button wire:click="EditDurable('{{ $commo->service_list_id }}')"
                                             class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#EditModal">แก้ไข</button>
-                                        <button wire:click.prevent="DelDurable({{ $commo->service_list_id  }})"
+                                        <button wire:click.prevent="DelDurable({{ $commo->service_list_id }})"
                                             class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
@@ -56,7 +58,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มประเภทครุภัณฑ์</h1>
+                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มปัญหาครุภัณฑ์</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -64,7 +66,7 @@
                         <div class="form-floating mb-3">
                             <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
                                 id="durable_type" wire:model="durable_type" placeholder="">
-                            <label for="name" class="text-dark">ประเภทครุภัณฑ์</label>
+                            <label for="name" class="text-dark">ปัญหาครุภัณฑ์</label>
                             @error('durable_type')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -87,6 +89,7 @@
                     <button type="submit" class="btn btn-primary">บันทึก</button>
 
                 </div>
+
                 </form>
             </div>
         </div>
@@ -105,7 +108,7 @@
                         <div class="form-floating mb-3">
                             <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
                                 id="durable_type" wire:model="durable_type" placeholder="">
-                            <label for="name" class="text-dark">ประเภทครุภัณฑ์</label>
+                            <label for="name" class="text-dark">ปัญหาครุภัณฑ์</label>
                             @error('durable_type')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -140,6 +143,7 @@
     <script>
         document.addEventListener('datatable', event => {
             $(document).ready(function() {
+                /* localStorage.removeItem('DataTables_datatable1') */
                 $('#datatable1').DataTable({
                     stateSave: true,
                     stateSaveCallback: function(settings, data) {
@@ -154,19 +158,16 @@
                         this.api()
                             .columns([1])
                             .every(function() {
+
                                 var column = this;
                                 var select = $(
                                     '<select class="form-select mx-2"><option value="">' +
-                                    column
-                                    .header().textContent +
-                                    ' (ทั้งหมด)</option></select>'
-                                ).appendTo('#userstable_filter').on('change',
+                                    column.header().textContent +
+                                    ' (ทั้งหมด)</option></select>').appendTo(
+                                    '#userstable_filter').on('change',
                                     function() {
-                                        var val = $.fn.dataTable.util.escapeRegex($(
-                                            this).val());
-
-                                        column.search(val ? '^' + val + '$' : '', true,
-                                            false).draw();
+                                        column.search($(this).val())
+                                            .draw();
                                     });
 
                                 column
@@ -176,6 +177,11 @@
                                     .each(function(d, j) {
                                         select.append('<option>' + d + '</option>');
                                     });
+                                var state = this.state.loaded();
+                                if (state) {
+                                    var val = state.columns[this.index()];
+                                    select.val(val.search.search);
+                                }
                             });
                     },
                     "language": {
@@ -230,10 +236,10 @@
                 }).rows().invalidate('data').draw(false).buttons().container().appendTo("#tt");
             });
         });
+
         document.addEventListener('close-modal', event => {
             $('#StoreModal').modal('hide');
             $('#EditModal').modal('hide');
-            
         });
         document.addEventListener('show-modal-edit', event => {
             $('#EditModal').modal('show');
@@ -250,10 +256,23 @@
                 cancelButtonText: 'ยกเลิก!'
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     @this.dispatch('DeleteConfirm');
                 }
             })
+        });
+        document.addEventListener('alert_success', event => {
+            Swal.fire(
+                'สำเร็จแล้ว!',
+                'การกระทำของคุณสำเร็จแล้ว!',
+                'success'
+            )
+        });
+        document.addEventListener('alert_error', event => {
+            Swal.fire(
+                'ไม่สำเร็จ!',
+                'การกระทำของคุณไม่สำเร็จ!',
+                'error'
+            )
         });
     </script>
 @endpush
