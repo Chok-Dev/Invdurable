@@ -71,8 +71,9 @@
                                             data-year="{{ $commo->year_received }}" data-ip="{{ $commo->anydesk_ip }}"
                                             data-comtype="{{ $commo->com_type_id }}"
                                             data-ward="{{ $commo->inv_dep_id }}">แก้ไข</button>
-                                      
-                                        <a href=" {{ route('pdf', $commo->id) }} " target="_blank" class="btn btn-success btn-sm">พิมพ์</a>
+
+                                        <a href=" {{ route('pdf', $commo->id) }} " target="_blank"
+                                            class="btn btn-success btn-sm">พิมพ์</a>
                                         <a href=" {{ route('daruble_del', $commo->id) }} " class="btn btn-danger btn-sm"
                                             data-confirm-delete="true">ลบ</a>
                                     </div>
@@ -314,7 +315,7 @@
                             .every(function() {
                                 var column = this;
                                 var select = $(
-                                    '<select class="form-select mx-2"><option value="">' + column
+                                    '<select class="form-select fter mx-2"><option value="">' + column
                                     .header().textContent + ' (ทั้งหมด)</option></select>'
                                 ).appendTo('#userstable_filter').on('change',
                                     function() {
@@ -332,6 +333,15 @@
                                     .each(function(d, j) {
                                         select.append('<option>' + d + '</option>');
                                     });
+
+                            });
+                        var bt = $('<button class="btn btn-primary">รีเซ็ต</button>').appendTo(
+                            '#userstable_filter').on('click',
+                            function() {
+                                $('.fter').val('');
+                                var table = $('#datatable1').DataTable();
+	                            table.search('').columns().search('').draw();
+
                             });
                     },
                     "language": {

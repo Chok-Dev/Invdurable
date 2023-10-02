@@ -324,7 +324,7 @@
                             .every(function() {
                                 var column = this;
                                 var select = $(
-                                    '<select class="form-select mx-2"><option value="">' + column
+                                    '<select class="form-select fter mx-2"><option value="">' + column
                                     .header().textContent + ' (ทั้งหมด)</option></select>'
                                 ).appendTo('#userstable_filter').on('change',
                                     function() {
@@ -342,6 +342,14 @@
                                     .each(function(d, j) {
                                         select.append('<option>' + d + '</option>');
                                     });
+                            });
+                            var bt = $('<button class="btn btn-primary">รีเซ็ต</button>').appendTo(
+                            '#userstable_filter').on('click',
+                            function() {
+                                $('.fter').val('');
+                                var table = $('#datatable1').DataTable();
+	                            table.search('').columns().search('').draw();
+
                             });
                     },
                     "language": {

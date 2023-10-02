@@ -192,7 +192,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="menu-item @if (request()->routeIs('setting_serviece')) open active @endif">
+                    <li class="menu-item @if (request()->routeIs('setting_serviece') or request()->routeIs('setting_type') or request()->routeIs('setting_status')) open active @endif">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class='menu-icon tf-icons bx bx-cog'></i>
                             <div data-i18n="ตั้งค่า">ตั้งค่า</div>
@@ -200,16 +200,16 @@
                         <ul class="menu-sub">
                             <li class="menu-item @if (request()->routeIs('setting_serviece')) active @endif">
                                 <a href="{{ route('setting_serviece') }}" class="menu-link">
-                                    <div data-i18n="ประเภทครุภัณฑ์">ปัญหา</div>
+                                    <div data-i18n="ประเภทครุภัณฑ์">การบริการ</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="" class="menu-link">
+                            <li class="menu-item @if (request()->routeIs('setting_type')) active @endif">
+                                <a href="{{ route('setting_type') }}" class="menu-link">
                                     <div data-i18n="ปัญหา">ประเภทครุภัณฑ์</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="" class="menu-link">
+                            <li class="menu-item @if (request()->routeIs('setting_status')) active @endif">
+                                <a href="{{ route('setting_status') }}" class="menu-link">
                                     <div data-i18n="สถานะแจ้งซ่อม">สถานะแจ้งซ่อม</div>
                                 </a>
                             </li>

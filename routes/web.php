@@ -4,6 +4,7 @@ use App\Http\Controllers\DurableController;
 use App\Http\Controllers\FixController;
 use App\Http\Controllers\RepairController;
 use App\Livewire\Setting\DurableService;
+use App\Livewire\Setting\DurableStatus;
 use App\Livewire\Setting\DurableType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,8 @@ Route::middleware(['auth', 'user-role:Admin'])->group(function () {
 
 
         Route::get('setting_serviece', DurableService::class)->name('setting_serviece');
+        Route::get('setting_type', DurableType::class)->name('setting_type');
+        Route::get('setting_status', DurableStatus::class)->name('setting_status');
     });
 
     Route::controller(RepairController::class)->group(function () {
@@ -51,6 +54,7 @@ Route::middleware(['auth', 'user-role:Admin'])->group(function () {
 
 Route::controller(FixController::class)->group(function () {
     Route::get('/fix', 'index')->name('fix');
+    Route::get('/fix/{id}', 'index2')->name('fix2');
     Route::post('/fix', 'fix')->name('fix1');
 });
 

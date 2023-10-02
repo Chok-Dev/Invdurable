@@ -5,7 +5,7 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    การบริการ
+                    สถานะดำเนินการ
                 </div>
                 <div>
                     <button wire:click='resetinput' class="btn btn-primary" data-bs-toggle="modal"
@@ -23,9 +23,9 @@
                     <thead>
                         <tr>
                             <th class="text-center">ลำดับ</th>
-                            {{-- <th class="text-center">รหัส</th> --}}
-                            <th class="text-center text-nowrap">การบริการ</th>
-                            <th class="text-center text-nowrap">เลขครุภัณฑ์</th>
+                            <th class="text-center text-nowrap">ไอดี</th>
+                            <th class="text-center text-nowrap">สถานะดำเนินการ</th>
+                            <th class="text-center text-nowrap">สี</th>
                             <th class="text-center text-nowrap">จัดการ</th>
                     </thead>
 
@@ -33,14 +33,16 @@
                         @foreach ($data as $commo)
                             <tr class="text-nowrap">
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $commo->service_list_name }}</td>
-                                <td>{{ $commo->v_id }}</td>
+                                <td>{{ $commo->id }}</td>
+                                <td>{{ $commo->status_name }}</td>
+                                <td><span
+                                    class="badge rounded-pill {{ $commo->status_tag }}">{{ $commo->status_tag }}</span></td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->service_list_id }}')"
+                                        <button wire:click="EditDurable('{{ $commo->id }}')"
                                             class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#EditModal">แก้ไข</button>
-                                        <button wire:click.prevent="DelDurable({{ $commo->service_list_id }})"
+                                        <button wire:click.prevent="DelDurable({{ $commo->id }})"
                                             class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
@@ -48,9 +50,8 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div wire:loading.table>...</div>
                 <div class="alert alert-danger mt-3 mb-0" role="alert">
-                    คำเตือน : แมพเลขครุภัณฑ์ให้ตรงกับเลขครุภัณฑ์ใน Hosxp
+                    คำเตือน : แมพไอดีให้ตรงกับฟิลด์ inv_durable_good_rstatus_id ของ ตาราง inv_durable_good_repair_status ฐาน Hosxp
                 </div>
             </div>
         </div>
@@ -62,26 +63,36 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มการบริการ</h1>
+                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มประเภทครุภัณฑ์</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form wire:submit.prevent='storeDurableData'>
                         <div class="form-floating mb-3">
-                            <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
-                                id="durable_type" wire:model="durable_type" placeholder="">
-                            <label for="name" class="text-dark">การบริการ</label>
-                            @error('durable_type')
+                            <input type="input" class="form-control  @error('status_id') is-invalid @enderror"
+                                id="status_id" wire:model="status_id" placeholder="">
+                            <label for="name" class="text-dark">ไอดี</label>
+                            @error('status_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="input" class="form-control  @error('durable_vid') is-invalid @enderror"
-                                id="durable_vid" wire:model="durable_vid" placeholder="">
-                            <label for="name" class="text-dark">เลขครุภัณฑ์</label>
-                            @error('durable_vid')
+                            <input type="input" class="form-control  @error('status_name') is-invalid @enderror"
+                                id="status_name" wire:model="status_name" placeholder="">
+                            <label for="name" class="text-dark">สถานะ</label>
+                            @error('status_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="input" class="form-control  @error('status_color') is-invalid @enderror"
+                                id="status_color" wire:model="status_color" placeholder="">
+                            <label for="name" class="text-dark">สี</label>
+                            @error('status_color')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -104,26 +115,36 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">แก้ไขครุภัณฑ์</h1>
+                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">แก้ไขประเภทครุภัณฑ์</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form wire:submit.prevent='EditDurableData'>
                         <div class="form-floating mb-3">
-                            <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
-                                id="durable_type" wire:model="durable_type" placeholder="">
-                            <label for="name" class="text-dark">การบริการ</label>
-                            @error('durable_type')
+                            <input type="input" class="form-control  @error('status_id') is-invalid @enderror"
+                                id="status_id" wire:model="status_id" placeholder="">
+                            <label for="name" class="text-dark">ไอดี</label>
+                            @error('status_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="input" class="form-control  @error('durable_vid') is-invalid @enderror"
-                                id="durable_vid" wire:model="durable_vid" placeholder="">
-                            <label for="name" class="text-dark">เลขครุภัณฑ์</label>
-                            @error('durable_vid')
+                            <input type="input" class="form-control  @error('status_name') is-invalid @enderror"
+                                id="status_name" wire:model="status_name" placeholder="">
+                            <label for="name" class="text-dark">สถานะ</label>
+                            @error('status_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="input" class="form-control  @error('status_color') is-invalid @enderror"
+                                id="status_color" wire:model="status_color" placeholder="">
+                            <label for="name" class="text-dark">สี</label>
+                            @error('status_color')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -189,15 +210,14 @@
                                     var val = state.columns[this.index()];
                                     select.val(val.search.search);
                                 }
-                                var bt = $('<button class="btn btn-info">รีเซ็ต</button>')
-                                    .appendTo(
-                                        '#userstable_filter').on('click',
-                                        function() {
-                                            select.val("");
-                                            localStorage.removeItem('DataTables_datatable1')
-                                            column.search($(this).val()).draw();
-
-                                        });
+                                var bt = $('<button class="btn btn-info">รีเซ็ต</button>').appendTo(
+                                    '#userstable_filter').on('click',
+                                    function() {
+                                        select.val("");
+                                        localStorage.removeItem('DataTables_datatable1')
+                                        column.search($(this).val()).draw();
+                                        
+                                    });
                             });
                     }, */
                     "language": {

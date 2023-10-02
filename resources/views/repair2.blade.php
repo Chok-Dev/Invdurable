@@ -87,7 +87,7 @@
     ->select('officer.officer_id', 'doctor.name', 'emp.emp_id')
     ->get())
 
-    {{-- <div class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -160,7 +160,7 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 @endsection
 
 @section('js')
@@ -203,7 +203,7 @@
                     code += e.key;
                 }
             });
-           /*  $('#build').select2({
+            $('#build').select2({
                 dropdownParent: $('#exampleModal'),
                 theme: 'bootstrap-5',
             });
@@ -214,7 +214,7 @@
             //$('#exampleModal').modal('show');
             @isset(request()->id)
                 $('#exampleModal').modal('show');
-            @endisset */
+            @endisset
 
             $('#datatable1').DataTable({
                     initComplete: function() {

@@ -19,7 +19,17 @@ class FixController extends Controller
             ->get();
         return view('repair')->with('data', $data);
     }
-
+    public function index2($id)
+    {
+        $data = DB::table('durable_fix')
+            ->leftJoin('durable_goods', 'durable_fix.com_id', '=', 'durable_goods.id')
+            ->leftJoin('status', 'durable_fix.status_id', '=', 'status.id')
+            ->leftJoin('inv_dep', 'durable_goods.inv_dep_id', '=', 'inv_dep.inv_dep_id')
+            ->leftJoin('com_service_list', 'durable_fix.service_list_id', '=', 'com_service_list.service_list_id')
+            ->select('com_service_list.service_list_name', 'durable_goods.*', 'durable_fix.*', 'status.*', 'inv_dep.inv_dep_name')->orderBy('durable_fix.id', 'DESC')
+            ->get();
+        return view('repair2')->with('data', $data)->with('id', $id);
+    }
     public function fix(Request $request)
     {
         request()->validate(
@@ -31,7 +41,7 @@ class FixController extends Controller
             [
                 'username.required' => '* กรุณาใส่ชื่อของคุณ',
                 //'username.exists' => '* ไม่พบชื่อผู้ใช้นี้',
-                'solu.required' => '* กรุณาใส่ปัญหา',
+                'solu.required' => '* กรุณาใส่ปัญหา หรือ อาการที่พบ',
                 'tel.required' => '* กรุณาใส่เบอร์ติดต่อ',
             ]
         );

@@ -5,7 +5,7 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    การบริการ
+                    ประเภทครุภัณฑ์
                 </div>
                 <div>
                     <button wire:click='resetinput' class="btn btn-primary" data-bs-toggle="modal"
@@ -24,8 +24,7 @@
                         <tr>
                             <th class="text-center">ลำดับ</th>
                             {{-- <th class="text-center">รหัส</th> --}}
-                            <th class="text-center text-nowrap">การบริการ</th>
-                            <th class="text-center text-nowrap">เลขครุภัณฑ์</th>
+                            <th class="text-center text-nowrap">ประเภทครุภัณฑ์</th>
                             <th class="text-center text-nowrap">จัดการ</th>
                     </thead>
 
@@ -33,14 +32,13 @@
                         @foreach ($data as $commo)
                             <tr class="text-nowrap">
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $commo->service_list_name }}</td>
-                                <td>{{ $commo->v_id }}</td>
+                                <td>{{ $commo->com_type_name }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->service_list_id }}')"
+                                        <button wire:click="EditDurable('{{ $commo->com_type_id }}')"
                                             class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#EditModal">แก้ไข</button>
-                                        <button wire:click.prevent="DelDurable({{ $commo->service_list_id }})"
+                                        <button wire:click.prevent="DelDurable({{ $commo->com_type_id }})"
                                             class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
@@ -48,10 +46,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div wire:loading.table>...</div>
-                <div class="alert alert-danger mt-3 mb-0" role="alert">
-                    คำเตือน : แมพเลขครุภัณฑ์ให้ตรงกับเลขครุภัณฑ์ใน Hosxp
-                </div>
             </div>
         </div>
     </div>
@@ -62,7 +56,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มการบริการ</h1>
+                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">เพิ่มประเภทครุภัณฑ์</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -70,18 +64,8 @@
                         <div class="form-floating mb-3">
                             <input type="input" class="form-control  @error('durable_type') is-invalid @enderror"
                                 id="durable_type" wire:model="durable_type" placeholder="">
-                            <label for="name" class="text-dark">การบริการ</label>
+                            <label for="name" class="text-dark">ประเภทครุภัณฑ์</label>
                             @error('durable_type')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="input" class="form-control  @error('durable_vid') is-invalid @enderror"
-                                id="durable_vid" wire:model="durable_vid" placeholder="">
-                            <label for="name" class="text-dark">เลขครุภัณฑ์</label>
-                            @error('durable_vid')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -104,7 +88,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">แก้ไขครุภัณฑ์</h1>
+                    <h1 class="modal-title fs-5 text-primary fw-bold" id="exampleModalLabel">แก้ไขประเภทครุภัณฑ์</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -114,16 +98,6 @@
                                 id="durable_type" wire:model="durable_type" placeholder="">
                             <label for="name" class="text-dark">การบริการ</label>
                             @error('durable_type')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="input" class="form-control  @error('durable_vid') is-invalid @enderror"
-                                id="durable_vid" wire:model="durable_vid" placeholder="">
-                            <label for="name" class="text-dark">เลขครุภัณฑ์</label>
-                            @error('durable_vid')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -189,15 +163,14 @@
                                     var val = state.columns[this.index()];
                                     select.val(val.search.search);
                                 }
-                                var bt = $('<button class="btn btn-info">รีเซ็ต</button>')
-                                    .appendTo(
-                                        '#userstable_filter').on('click',
-                                        function() {
-                                            select.val("");
-                                            localStorage.removeItem('DataTables_datatable1')
-                                            column.search($(this).val()).draw();
-
-                                        });
+                                var bt = $('<button class="btn btn-info">รีเซ็ต</button>').appendTo(
+                                    '#userstable_filter').on('click',
+                                    function() {
+                                        select.val("");
+                                        localStorage.removeItem('DataTables_datatable1')
+                                        column.search($(this).val()).draw();
+                                        
+                                    });
                             });
                     }, */
                     "language": {
