@@ -71,7 +71,7 @@
     </div>
 
 
-    @php(
+   {{--  @php(
     $username = DB::connection('pgsql')->table('opduser')
     ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
     ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
@@ -85,8 +85,17 @@
   /*   ->whereNotNull('doctor.position_id') */
     ->whereNotNull('officer.officer_doctor_code')
     ->select('officer.officer_id', 'doctor.name', 'emp.emp_id')
+    ->get()) --}}
+@php(
+    $username = DB::connection('pgsql')->table('opduser')
+    ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
+    ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
+    ->leftJoin('emp', 'emp.emp_cid', '=', 'doctor.cid')
+    ->where('doctor.active', 'Y')
+    ->whereNotNull('emp.emp_id')
+    ->whereNotNull('officer.officer_doctor_code')
+    ->select('officer.officer_id', 'doctor.name', 'emp.emp_id','opduser.loginname')
     ->get())
-
     <div class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -109,8 +118,8 @@
                             <select class="form-select" id="service" name="username"
                                 aria-label="Floating label select example">
                                 @foreach ($username as $usernames)
-                                    <option value="{{ $usernames->officer_id }}"
-                                        {{ old('username') == $usernames->officer_id ? 'selected' : '' }}>
+                                    <option value="{{ $usernames->loginname }}"
+                                        {{ old('username') == $usernames->loginname ? 'selected' : '' }}>
                                         {{ $loop->iteration }}.) {{ $usernames->name }}
                                     </option>
                                 @endforeach

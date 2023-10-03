@@ -53,13 +53,14 @@ class FixController extends Controller
             $user = DB::connection('pgsql')->table('opduser')
                 ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
                 ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
-                ->leftJoin('emp', 'emp.emp_id', '=', 'officer.emp_id')
-                ->where('officer.officer_id', $request->username)
+                ->leftJoin('emp', 'emp.emp_cid', '=', 'doctor.cid')
+                ->where('opduser.loginname', $request->username)
                 ->where('doctor.active', 'Y')
                 ->whereNotNull('emp.emp_id')
                 ->whereNotNull('officer.officer_doctor_code')
                 ->select('doctor.name', 'opduser.loginname', 'emp.emp_id', 'emp.emp_dep_id')->first();
-/* dd($user); */
+            
+/* dd($user);  */
             $com = DB::connection('pgsql')->table('inv_durable_good')
                 ->where('inv_durable_good_code', ($commo->durable_id == "-") ? $ser->v_id : $commo->durable_id)
                 ->select('inv_durable_good_id')->first();
