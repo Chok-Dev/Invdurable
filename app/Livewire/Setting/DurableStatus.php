@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class DurableStatus extends Component
 {
-    protected $listeners = ['DeleteConfirm' => 'DelDurableData'];
+    protected $listeners = ['DeleteConfirm' => 'DelDurableData',
+    'EditDurable' => 'EditDurable'];
     public $status_id, $status_name, $status_color,$status_edit_id;
 
     public function resetinput()
@@ -105,30 +106,25 @@ class DurableStatus extends Component
             $this->dispatch('alert_error');
         }
     }
-    public function DelDurable($id)
+    /* public function DelDurable($id)
     {
         $data = DB::table('status')->where('id', $id)->first();
         $this->status_id = $data->id;
         $this->dispatch('al-del');
-    }
-    public function DelDurableData()
+    } */
+    public function DelDurableData($id)
     {
 
         DB::beginTransaction();
         try {
-            DB::table('status')->where('id', '=', $this->status_id)->delete();
-            $this->status_id = '';
-            $this->status_name = '';
-            $this->status_color = '';
+            DB::table('status')->where('id', '=', $id)->delete();
             DB::Commit();
             $this->dispatch('alert_success');
         } catch (Exception $e) {
-            $this->status_id = '';
-            $this->status_name = '';
-            $this->status_color = '';
             DB::rollback();
             $this->dispatch('alert_error');
         }
+        
     }
 
 

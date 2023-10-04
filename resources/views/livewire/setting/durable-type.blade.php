@@ -35,10 +35,12 @@
                                 <td>{{ $commo->com_type_name }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->com_type_id }}')"
+                                        {{-- <button wire:click="EditDurable('{{ $commo->com_type_id }}')"
                                             class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#EditModal">แก้ไข</button>
-                                        <button wire:click.prevent="DelDurable({{ $commo->com_type_id }})"
+                                            data-bs-target="#EditModal">แก้ไข</button> --}}
+                                        <button class="name-button btn btn-info btn-sm"
+                                            wire:click="$dispatch('EditClick', { id: {{ $commo->com_type_id }} })">แก้ไข</button>
+                                        <button wire:click.prevent="$dispatch('al-del', { id: {{ $commo->com_type_id }} })"
                                             class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
@@ -119,6 +121,11 @@
 
 @push('scripts')
     <script>
+        document.addEventListener('EditClick', event => {
+            @this.dispatch('EditDurable', {
+                id: event.detail.id
+            });
+        });
         document.addEventListener('datatable', event => {
             $(document).ready(function() {
                 /* localStorage.removeItem('DataTables_datatable1') */
@@ -245,7 +252,9 @@
                 cancelButtonText: 'ยกเลิก!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    @this.dispatch('DeleteConfirm');
+                    @this.dispatch('DeleteConfirm', {
+                        id: event.detail.id
+                    });
                 }
             })
         });

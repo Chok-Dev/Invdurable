@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class DurableType extends Component
 {
-    protected $listeners = ['DeleteConfirm' => 'DelDurableData'];
+    protected $listeners = ['DeleteConfirm' => 'DelDurableData',
+    'EditDurable' => 'EditDurable'];
     public $durable_type, $durable_id;
     
 
@@ -86,26 +87,22 @@ class DurableType extends Component
         }
     }
 
-    public function DelDurable($id)
+    /* public function DelDurable($id)
     {
         $data = DB::table('com_type')->where('com_type_id', $id)->first();
         $this->durable_type = $data->com_type_name;
         $this->durable_id = $data->com_type_id;
         $this->dispatch('al-del');
-    }
-    public function DelDurableData()
+    } */
+    public function DelDurableData($id)
     {
 
         DB::beginTransaction();
         try {
-            DB::table('com_type')->where('com_type_id', '=', $this->durable_id)->delete();
-            $this->durable_id = '';
-            $this->durable_type = '';
+            DB::table('com_type')->where('com_type_id', '=', $id)->delete();
             DB::Commit();
             $this->dispatch('alert_success');
         } catch (Exception $e) {
-            $this->durable_id = '';
-            $this->durable_type = '';
             DB::rollback();
             $this->dispatch('alert_error');
         }

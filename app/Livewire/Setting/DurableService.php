@@ -8,10 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class DurableService extends Component
 {
-    protected $listeners = ['DeleteConfirm' => 'DelDurableData'];
+    protected $listeners = ['DeleteConfirm' => 'DelDurableData',
+    'EditDurable' => 'EditDurable'];
     public $durable_type, $durable_id, $durable_vid;
     
 
+    /* public function testna($id)
+    {
+        $this->durable_id = '';
+        $this->durable_type = '';
+        $data = DB::table('com_service_list')->where('service_list_id', $id)->first();
+        $this->durable_type = $data->service_list_name;
+        $this->durable_vid = $data->v_id;
+        $this->durable_id = $data->service_list_id;
+        $this->dispatch('show-modal-edit');
+    } */
     public function resetinput()
     {
         $this->durable_id = '';
@@ -101,26 +112,22 @@ class DurableService extends Component
             $this->dispatch('alert_error');
         }
     }
-    public function DelDurable($id)
+    /* public function DelDurable($id)
     {
         $data = DB::table('com_service_list')->where('service_list_id', $id)->first();
         $this->durable_type = $data->service_list_name;
         $this->durable_id = $data->service_list_id;
         $this->dispatch('al-del');
-    }
-    public function DelDurableData()
+    } */
+    public function DelDurableData($id)
     {
 
         DB::beginTransaction();
         try {
-            DB::table('com_service_list')->where('service_list_id', '=', $this->durable_id)->delete();
-            $this->durable_id = '';
-            $this->durable_type = '';
+            DB::table('com_service_list')->where('service_list_id', '=', $id)->delete();
             DB::Commit();
             $this->dispatch('alert_success');
         } catch (Exception $e) {
-            $this->durable_id = '';
-            $this->durable_type = '';
             DB::rollback();
             $this->dispatch('alert_error');
         }

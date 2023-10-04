@@ -37,18 +37,22 @@
                                 <td>{{ $commo->v_id }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->service_list_id }}')"
+                                        {{-- <button wire:click="EditDurable('{{ $commo->service_list_id }}')"
                                             class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#EditModal">แก้ไข</button>
-                                        <button wire:click.prevent="DelDurable({{ $commo->service_list_id }})"
+                                            data-bs-target="#EditModal">แก้ไข</button> --}}
+                                        <button class="name-button btn btn-info btn-sm"
+                                            wire:click="$dispatch('EditClick', { id: {{ $commo->service_list_id }} })">แก้ไข</button>
+
+                                        <button wire:click.prevent="$dispatch('al-del', { id: {{ $commo->service_list_id }} })"
                                             class="btn btn-danger btn-sm">ลบ</button>
+                                           
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <div wire:loading.table>...</div>
+                {{-- <div wire:loading.table>กำลังโหลด</div> --}}
                 <div class="alert alert-danger mt-3 mb-0" role="alert">
                     คำเตือน : แมพเลขครุภัณฑ์ให้ตรงกับเลขครุภัณฑ์ใน Hosxp
                 </div>
@@ -139,12 +143,20 @@
             </div>
         </div>
     </div>
+    {{--  <button wire:click="$dispatch('show-post-modal', { id: 3,io: 8 })">
+        EditPost
+    </button> --}}
 </div>
 
 
 
 @push('scripts')
     <script>
+        document.addEventListener('EditClick', event => {
+            @this.dispatch('EditDurable', {
+                id: event.detail.id
+            });
+        });
         document.addEventListener('datatable', event => {
             $(document).ready(function() {
                 /* localStorage.removeItem('DataTables_datatable1') */
@@ -272,7 +284,9 @@
                 cancelButtonText: 'ยกเลิก!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    @this.dispatch('DeleteConfirm');
+                    @this.dispatch('DeleteConfirm', {
+                        id: event.detail.id
+                    });
                 }
             })
         });

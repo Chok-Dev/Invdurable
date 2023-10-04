@@ -36,13 +36,16 @@
                                 <td>{{ $commo->id }}</td>
                                 <td>{{ $commo->status_name }}</td>
                                 <td><span
-                                    class="badge rounded-pill {{ $commo->status_tag }}">{{ $commo->status_tag }}</span></td>
+                                        class="badge rounded-pill {{ $commo->status_tag }}">{{ $commo->status_tag }}</span>
+                                </td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                        <button wire:click="EditDurable('{{ $commo->id }}')"
+                                        {{-- <button wire:click="EditDurable('{{ $commo->id }}')"
                                             class="name-button btn btn-info btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#EditModal">แก้ไข</button>
-                                        <button wire:click.prevent="DelDurable({{ $commo->id }})"
+                                            data-bs-target="#EditModal">แก้ไข</button> --}}
+                                        <button class="name-button btn btn-info btn-sm"
+                                            wire:click="$dispatch('EditClick', { id: {{ $commo->id }} })">แก้ไข</button>
+                                        <button wire:click.prevent="$dispatch('al-del', { id: {{ $commo->id }} })"
                                             class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
@@ -51,7 +54,8 @@
                     </tbody>
                 </table>
                 <div class="alert alert-danger mt-3 mb-0" role="alert">
-                    คำเตือน : แมพไอดีให้ตรงกับฟิลด์ inv_durable_good_rstatus_id ของ ตาราง inv_durable_good_repair_status ฐาน Hosxp
+                    คำเตือน : แมพไอดีให้ตรงกับฟิลด์ inv_durable_good_rstatus_id ของ ตาราง inv_durable_good_repair_status
+                    ฐาน Hosxp
                 </div>
             </div>
         </div>
@@ -166,6 +170,11 @@
 
 @push('scripts')
     <script>
+        document.addEventListener('EditClick', event => {
+            @this.dispatch('EditDurable', {
+                id: event.detail.id
+            });
+        });
         document.addEventListener('datatable', event => {
             $(document).ready(function() {
                 /* localStorage.removeItem('DataTables_datatable1') */
@@ -292,7 +301,9 @@
                 cancelButtonText: 'ยกเลิก!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    @this.dispatch('DeleteConfirm');
+                    @this.dispatch('DeleteConfirm', {
+                        id: event.detail.id
+                    });
                 }
             })
         });
