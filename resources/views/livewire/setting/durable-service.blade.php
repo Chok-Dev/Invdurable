@@ -146,6 +146,7 @@
     {{--  <button wire:click="$dispatch('show-post-modal', { id: 3,io: 8 })">
         EditPost
     </button> --}}
+    
 </div>
 
 

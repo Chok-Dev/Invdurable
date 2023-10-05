@@ -128,7 +128,10 @@ class DurableStatus extends Component
     }
 
 
-
+    public function boot()
+    {
+        $this->dispatch('datatable');
+    }
 
     public function render()
     {

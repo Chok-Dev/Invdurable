@@ -3,6 +3,7 @@
 use App\Http\Controllers\DurableController;
 use App\Http\Controllers\FixController;
 use App\Http\Controllers\RepairController;
+use App\Livewire\Admin\Durables;
 use App\Livewire\Setting\DurableService;
 use App\Livewire\Setting\DurableStatus;
 use App\Livewire\Setting\DurableType;
@@ -32,7 +33,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware(['auth', 'user-role:Admin'])->group(function () {
     Route::controller(DurableController::class)->group(function () {
-        Route::get('/durables', 'index')->name('durables');
+        /* Route::get('/durables', 'index')->name('durables'); */
+        Route::get('durables', Durables::class)->name('durables');
+
         Route::post('/daruble_edit', 'daruble_edit')->name('daruble_edit');
         Route::post('/daruble_add', 'daruble_add')->name('daruble_add');
         Route::delete('/daruble_del/{id}', 'destroy')->name('daruble_del');
