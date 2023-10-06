@@ -48,7 +48,8 @@
                                             class="name-button btn btn-info btn-sm">แก้ไข</button>
                                         <a href="{{ route('pdf', $commo->id) }}" target="_blank"
                                             class="btn btn-success btn-sm">พิมพ์</a>
-                                        <button wire:click.prevent="$dispatch('al-del', { id: '{{ $commo->id }}' })" class="btn btn-danger btn-sm">ลบ</button>
+                                        <button wire:click.prevent="$dispatch('al-del', { id: '{{ $commo->id }}' })"
+                                            class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
                             </tr>
@@ -77,7 +78,8 @@
                         </div>
                         <div class="form-floating mb-3">
                             <input type="input" wire:model='durable_name'
-                                class="form-control  @error('durable_name') is-invalid @enderror" id="durable_name" placeholder="">
+                                class="form-control  @error('durable_name') is-invalid @enderror" id="durable_name"
+                                placeholder="">
                             <label for="durable_name" class="">ชื่อเครื่อง</label>
                             @error('durable_name')
                                 <span class="invalid-feedback" role="alert">
@@ -168,7 +170,8 @@
                         </div>
                         <div class="form-floating mb-3">
                             <input type="input" wire:model='durable_name'
-                                class="form-control  @error('durable_name') is-invalid @enderror" id="durable_name" placeholder="">
+                                class="form-control  @error('durable_name') is-invalid @enderror" id="durable_name"
+                                placeholder="">
                             <label for="durable_name" class="">ชื่อเครื่อง</label>
                             @error('durable_name')
                                 <span class="invalid-feedback" role="alert">
@@ -191,7 +194,7 @@
                         <div class="form-floating mb-3">
                             <select id="comtype" wire:model='durable_type'
                                 class="form-select @error('durable_type') is-invalid @enderror"
-                                aria-label="Floating label select example" >
+                                aria-label="Floating label select example">
                                 <option></option>
                                 @foreach ($comtype as $comtypes)
                                     <option value="{{ $comtypes->com_type_id }}">
@@ -356,20 +359,133 @@
                             });
                     },
                     "language": {
-                        "sProcessing": "กำลังดำเนินการ...",
-                        "sLengthMenu": "แสดง_MENU_ แถว",
-                        "sZeroRecords": "ไม่พบข้อมูล",
-                        "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-                        "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
-                        "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
-                        "sInfoPostFix": "",
-                        "sSearch": "ค้นหา:",
-                        "sUrl": "",
-                        "oPaginate": {
-                            "sFirst": "เริ่มต้น",
-                            "sPrevious": "ก่อนหน้า",
-                            "sNext": "ถัดไป",
-                            "sLast": "สุดท้าย"
+                        "emptyTable": "ไม่มีข้อมูลในตาราง",
+                        "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                        "infoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
+                        "infoThousands": ",",
+                        "lengthMenu": "แสดง _MENU_ แถว",
+                        "loadingRecords": "กำลังโหลดข้อมูล...",
+                        "processing": "กำลังดำเนินการ...",
+                        "zeroRecords": "ไม่พบข้อมูล",
+                        "paginate": {
+                            "first": "หน้าแรก",
+                            "previous": "ก่อนหน้า",
+                            "next": "ถัดไป",
+                            "last": "หน้าสุดท้าย"
+                        },
+                        "aria": {
+                            "sortAscending": ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
+                            "sortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
+                        },
+                        "autoFill": {
+                            "cancel": "ยกเลิก",
+                            "fill": "กรอกทุกช่องด้วย",
+                            "fillHorizontal": "กรอกตามแนวนอน",
+                            "fillVertical": "กรอกตามแนวตั้ง"
+                        },
+                        "buttons": {
+                            "collection": "ชุดข้อมูล",
+                            "colvis": "การมองเห็นคอลัมน์",
+                            "colvisRestore": "เรียกคืนการมองเห็น",
+                            "copy": "คัดลอก",
+                            "copyKeys": "กดปุ่ม Ctrl หรือ Command + C เพื่อคัดลอกข้อมูลบนตารางไปยัง Clipboard ที่เครื่องของคุณ",
+                            "copySuccess": {
+                                "_": "คัดลอกช้อมูลแล้ว จำนวน %ds แถว",
+                                "1": "คัดลอกข้อมูลแล้ว จำนวน 1 แถว"
+                            },
+                            "copyTitle": "คัดลอกไปยังคลิปบอร์ด",
+                            "csv": "CSV",
+                            "excel": "Excel",
+                            "pageLength": {
+                                "_": "แสดงข้อมูล %d แถว",
+                                "-1": "แสดงข้อมูลทั้งหมด"
+                            },
+                            "pdf": "PDF",
+                            "print": "สั่งพิมพ์"
+                        },
+                        "infoEmpty": "แสดงทั้งหมด 0 to 0 of 0 รายการ",
+                        "search": "ค้นหา :",
+                        "thousands": ",",
+                        "datetime": {
+                            "amPm": [
+                                "เที่ยงวัน",
+                                "เที่ยงคืน"
+                            ],
+                            "hours": "ชั่วโมง",
+                            "minutes": "นาที",
+                            "months": {
+                                "0": "มกราคม",
+                                "1": "กุมภาพันธ์",
+                                "10": "พฤศจิกายน",
+                                "11": "ธันวาคม",
+                                "2": "มีนาคม",
+                                "3": "เมษายน",
+                                "4": "พฤษภาคม",
+                                "5": "มิถุนายน",
+                                "6": "กรกฎาคม",
+                                "7": "สิงหาคม",
+                                "8": "กันยายน",
+                                "9": "ตุลาคม"
+                            },
+                            "next": "ถัดไป",
+                            "seconds": "วินาที",
+                            "unknown": "ไม่ทราบ",
+                            "weekdays": [
+                                "วันอาทิตย์",
+                                "วันจันทร์",
+                                "วันอังคาร",
+                                "วันพุธ",
+                                "วันพฤหัส",
+                                "วันศุกร์",
+                                "วันเสาร์"
+                            ],
+                            "previous": "ก่อนหน้า"
+                        },
+                        "decimal": "จุดทศนิยม",
+                        "editor": {
+                            "close": "ปิด",
+                            "create": {
+                                "button": "สร้าง",
+                                "submit": "สร้างข้อมูล",
+                                "title": "สร้างข้อมูลใหม่"
+                            },
+                            "edit": {
+                                "button": "แก้ไข",
+                                "submit": "บันทึก",
+                                "title": "แก้ไขข้อมูล"
+                            },
+                            "error": {
+                                "system": "เกิดข้อผิดพลาดของระบบ (&lt;a target=\"\\\" rel=\"nofollow\" href=\"\\\"&gt;ดูข้อมูลเพิ่มเติม)."
+                            },
+                            "remove": {
+                                "button": "ลบ",
+                                "submit": "ลบข้อมูล",
+                                "title": "ลบข้อมูล",
+                                "confirm": {
+                                    "_": "คุณแน่ใจที่จะลบข้อมูล %d รายการนี้ หรือไม่?",
+                                    "1": "คุณแน่ใจที่จะลบข้อมูลรายการนี้ หรือไม่?"
+                                }
+                            },
+                            "multi": {
+                                "restore": "ยกเลิกการแก้ไข"
+                            }
+                        },
+                        "searchBuilder": {
+                            "add": "เพิ่มเงื่อนไข",
+                            "clearAll": "ยกเลิกทั้งหมด",
+                            "condition": "เงื่อนไข",
+                            "data": "ข้อมูล",
+                            "deleteTitle": "ลบเงื่อนไขการกรอง"
+                        },
+                        "select": {
+                            "cells": {
+                                "1": "เลือก 1 cell",
+                                "_": "เลือก %d cells"
+                            },
+                            "columns": {
+                                "1": "เลือก 1 column",
+                                "_": "เลือก %d columns"
+                            }
                         }
                     },
 

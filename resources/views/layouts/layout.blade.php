@@ -1,6 +1,4 @@
-{{-- @php
-    header('Content-Security-Policy: upgrade-insecure-requests');
-@endphp --}}
+
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
     data-assets-path="{{ asset('uipack/assets/') }}" data-template="vertical-menu-template-free">
 
