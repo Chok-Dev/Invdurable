@@ -163,6 +163,6 @@ class Durables extends Component
             ->leftJoin('inv_dep', 'durable_goods.inv_dep_id', '=', 'inv_dep.inv_dep_id')
             ->orderbyDesc('durable_goods.id')
             ->get();
-        return view('livewire.admin.durables', ['data' => $d])->layout('livewire.admin.base');
+        return view('livewire.admin.durables', ['data' => $d])->layout('livewire.admin.base')->title('ทะเบียนครุภัณฑ์');
     }
 }
