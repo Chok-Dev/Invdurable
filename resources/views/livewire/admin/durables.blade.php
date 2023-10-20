@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">ลำดับ</th>
-                            {{-- <th class="text-center">รหัส</th> --}}
+                            <th class="text-center">ชื่อเครื่อง</th>
                             <th class="text-center text-nowrap">เลขครุภัณฑ์</th>
                             <th class="text-center text-nowrap">ประเภทครุภัณฑ์</th>
                             <th class="text-center text-nowrap">ปีที่ได้</th>
@@ -36,7 +36,7 @@
                         @foreach ($data as $commo)
                             <tr class="text-nowrap">
                                 <td>{{ $loop->iteration }}</td>
-                                {{-- <td>{{ $commo->id }}</td> --}}
+                                <td>{{ $commo->durable_name }}</td>
                                 <td>{{ $commo->durable_id }}</td>
                                 <td>{{ $commo->com_type_name }}</td>
                                 <td>{{ $commo->year_received }}</td>
