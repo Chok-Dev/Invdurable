@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layouts.layout');
+    return view('dashboard');
 })->name('index');
 /* Route::get('/durables', function () {
     return view('admin.durables');

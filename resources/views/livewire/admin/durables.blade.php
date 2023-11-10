@@ -327,7 +327,7 @@
                     },
                     initComplete: function() {
                         this.api()
-                            .columns([2, 3, 5])
+                            .columns([3, 4, 6])
                             .every(function() {
                                 var column = this;
                                 var select = $(

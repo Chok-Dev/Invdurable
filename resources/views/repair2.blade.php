@@ -89,8 +89,8 @@
 @php(
     $username = DB::connection('pgsql')->table('opduser')
     ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
-    ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
-    ->leftJoin('emp', 'emp.emp_cid', '=', 'doctor.cid')
+    ->leftJoin('doctor', 'officer.officer_doctor_code', '=', 'doctor.code')
+    ->leftJoin('emp', 'doctor.cid', '=', 'emp.emp_cid')
     ->where('doctor.active', 'Y')
     ->whereNotNull('emp.emp_id')
     ->whereNotNull('officer.officer_doctor_code')

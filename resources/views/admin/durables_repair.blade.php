@@ -138,11 +138,16 @@
                     <form class="" action="{{ route('updateRepair') }}" method="POST">
                         @csrf
                         @method('post')
-                        <div class="form-floating mb-3">
+                        <div class="form-floating">
                             <input type="hidden" name="repair_id" class="form-control" id="repair_id" placeholder=""
                                 value="">
                             <input type="hidden" name="id" class="form-control" id="id" placeholder=""
                                 value="">
+                        </div>
+                        <div class="divider">
+                            <div class="divider-text">
+                               สำหรับช่าง
+                            </div>
                         </div>
                         <div class="form-floating mb-3">
                             <select class="form-select" id="apparv_emp" name="evaluate"
