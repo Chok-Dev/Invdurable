@@ -38,7 +38,7 @@ class DurableController extends Controller
 
         return $pdf->stream("$id.pdf");
     }
-    public function index()
+    /* public function index()
     {
         $comtype = DB::table('com_type')
             ->select('*')
@@ -55,6 +55,16 @@ class DurableController extends Controller
         $text = "คุณแน่ใจที่จะลบหรือไหม?";
         confirmDelete($title, $text);
         return view('admin.durables')->with('comtype', $comtype)->with('invdep', $invdep)->with('data', $d);
+    } */
+    public function index()
+    {
+
+        /* $data = DB::connection('pgsql')
+        ->table('inv_durable_good_repair')
+        ->select('inv_durable_good_repair_id')
+        ->where('inv_durable_good_repair_dep_id',2); */
+       /*  dd( $data); */
+        return view('dashboard');
     }
 
     public function durables_qrcode()

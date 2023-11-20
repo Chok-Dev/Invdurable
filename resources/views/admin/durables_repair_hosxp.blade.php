@@ -1,11 +1,11 @@
 @extends('layouts.layout');
 
 @section('title')
-    จัดการแจ้งซ่อม
+    จัดการแจ้งซ่อม (Hosxp)
 @endsection
 
 @section('header')
-    จัดการแจ้งซ่อม
+    จัดการแจ้งซ่อม (Hosxp)
 @endsection
 
 @section('css')
@@ -15,25 +15,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-    {{-- @livewireStyles --}}
-    <link type="text/css" href="{{ asset('uipack/signature/jquery-ui.css') }}"rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('uipack/signature/jquery.signature.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css" />
-    <style>
-        .kbw-signature {
-            width: 450px;
-            height: 200px;
-        }
-
-        .child {
-            display: none;
-        }
-
-        .parent:hover .child {
-            display: block;
-        }
-    </style>
+    {{-- @livewireStyles --}}
 @endsection
 
 @section('body')
@@ -45,7 +28,7 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    จัดการแจ้งซ่อม
+                    จัดการแจ้งซ่อม (Hosxp)
                 </div>
             </div>
         </h5>
@@ -53,72 +36,77 @@
             <div class="d-inline-flex  mb-3" id="userstable_filter">
             </div>
             <div class="table-responsive text-nowrap">
-                <table class="table table-bordered text-start table-striped" id="datatable1">
+                <table class="table table-bordered text-start table-striped" id="datatable250">
                     <thead>
                         <tr class="text-nowrap">
                             <th class="text-center">ลำดับ</th>
                             <th class="text-center">จัดการ</th>
                             <th class="text-center">สถานะ</th>
-                            <th class="text-center">ประเภท</th>
                             <th class="text-center">หน่วยงาน</th>
                             <th class="text-center">เบอร์</th>
-                            <th class="text-center">บริการ</th>
                             <th class="text-center">สาเหตุ</th>
-                            <th class="text-center">ลายเซ็นรับรอง</th>
+                            <th class="text-center">ประเภท</th>
                             <th class="text-center">ผู้ซ่อม</th>
-                            {{-- <th class="text-center">Anydesk</th> --}}
-                            <th class="text-center">วัน/เวลา</th>
-                            
+                            <th class="text-center">วันที่แจ้ง</th>
+
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach ($data as $value)
-                            <tr class="text-center ">
-                                <td>{{ $loop->iteration }}</td>
+                            <tr class="text-nowrap">
+                                <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                         <button class="name-button btn btn-info  btn-sm" data-bs-toggle="modal"
-                                            data-repair_id="{{ $value->hos_repiar_id }}" data-bs-target="#exampleModal"
-                                            data-name="{{ $value->durable_name }}"
-                                            data-evl_type="{{ $value->help_evl_type_id }}"
-                                            data-apprv_emp_id="{{ $value->help_apprv_emp_id }}"
-                                            data-id="{{ $value->id }}" data-comid="{{ $value->com_id }}"
-                                            data-status="{{ $value->status_id }}"
+                                            data-repair_id="{{ $value->inv_durable_good_repair_id }}"
+                                            data-bs-target="#exampleModal"
+                                            data-name="{{ $value->inv_durable_good_repair_id }}"
+                                            data-id="{{ $value->inv_durable_good_code }}"
+                                            data-comid="{{ $value->inv_durable_good_code }}"
+                                            data-evl_type="{{ $value->inv_durable_good_evl_type_id }}"
+                                            data-apprv_emp_id="{{ $value->inv_durable_good_apprv_emp_id }}"
+                                            data-status="{{ $value->inv_durable_good_rstatus_id }}"
                                             data-score="{{ $value->inv_durable_rate_after_point }}"
                                             data-rate="{{ $value->inv_durable_rate_after_emp_id }}"
-                                            data-detail="{{ $value->help_detail }}">ประเมิน
+                                            data-detail="{{ $value->inv_durable_good_repair_desc }}">ประเมิน
                                         </button>
-                                        <a href="{{ route('DelRepair', $value->id) }}" class="btn btn-danger btn-sm"
-                                            data-confirm-delete="true">ลบ</a>
+                                        <a href="{{ route('DelRepair2', $value->inv_durable_good_repair_id) }}"
+                                            class="btn btn-danger btn-sm" data-confirm-delete="true">ลบ</a>
                                     </div>
                                 </td>
-                                <td><span class="badge {{ $value->status_tag }}">{{ $value->status_name }}</span>
+                                <td class="text-center"><span
+                                        class="badge 
+                                    @if ($value->inv_durable_good_rstatus_name == '') bg-label-dark
+                                    @elseif ($value->inv_durable_good_rstatus_name == 'รับเรื่องแล้ว')
+                                    bg-label-primary
+                                    @elseif ($value->inv_durable_good_rstatus_name == 'แทงชำรุด')
+                                    bg-label-danger
+                                    @elseif ($value->inv_durable_good_rstatus_name == 'ส่งภายนอก')
+                                    bg-label-warning
+                                    @elseif ($value->inv_durable_good_rstatus_name == 'กำลังดำเนินการซ่อม')
+                                    bg-label-info
+                                    @elseif ($value->inv_durable_good_rstatus_name == 'ซ่อมเรียบร้อย')
+                                    bg-label-success @endif">
+                                        @if ($value->inv_durable_good_rstatus_name == '')
+                                            รอรับเรื่อง
+                                        @else
+                                            {{ $value->inv_durable_good_rstatus_name }}
+                                        @endif
+                                    </span>
 
                                 </td>
+                                <td class="text-center">{{ $value->inv_dep_name }}</td>
+                                <td class="text-center">{{ $value->inv_durable_good_repair_tel }}</td>
 
-                                <td>{{ $value->com_type_name }}</td>
-                                <td>{{ $value->inv_dep_name }}</td>
-                                <td>{{ $value->tel_number }}</td>
-                                <td>{{ $value->service_list_name }}</td>
-                                <td>{{ $value->solution }}</td>
-
-                                <td>
-                                    @if (!empty($value->signed))
-                                        <p class='parent'>ดู<img class="child"
-                                                src="{{ asset('storage/signed/' . $value->signed) }}" width="150"
-                                                height="100" /></p>
-
-                                        {{-- <a href="{{ asset('storage/signed/' . $value->signed) }}">ดู</a> --}}
-                                    @else
-                                        -
-                                    @endif
-
-                                </td>
-                                <td>{{ $value->engineer_name }}</td>
+                                <td>{{ $value->inv_durable_good_repair_cause }}</td>
+                                <td class="text-center">{{ $value->inv_durable_good_desc_name }}</td>
                                 {{-- <td class="user-select-all">{{ $value->anydesk_ip }}</td> --}}
-                                <td>{{ Carbon\Carbon::parse($value->created_at)->thaidate('j M y H:i:s') }}</td>
-                               
+                                <td class="text-center">{{ $value->adminfname }} {{ $value->adminlname }}</td>
+                                <td class="text-center">
+                                    {{ Carbon\Carbon::parse($value->inv_durable_good_repair_date)->thaidate('j M y') }}
+                                </td>
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -127,13 +115,11 @@
         </div>
     </div>
     @php(
-        $en = DB::table('durable_engineer')->get()
-/*     $en = DB::connection('pgsql')->table('emp')->where('emp_department_id', 39)->where('emp_status_id', 2)->select('emp_id', 'emp_dep_id', 'emp_first_name', 'emp_last_name')->get()
- */    )
+    $en = DB::connection('pgsql')->table('emp')->where('emp_department_id', 39)->where('emp_status_id', 2)->select('emp_id', 'emp_dep_id', 'emp_first_name', 'emp_last_name')->get())
     @php(
     $eval = DB::connection('pgsql')->table('inv_durable_good_evl_type')->get())
     @php(
-        $username = DB::connection('pgsql')->table('doctor')
+    $username = $username = DB::connection('pgsql')->table('doctor')
         ->select('emp.emp_id', 'doctor.name')
         ->leftJoin('emp','doctor.cid','=','emp.emp_cid')
         ->leftJoin('opduser','doctor.code','=','opduser.doctorcode')
@@ -141,15 +127,7 @@
         ->whereNotNull('doctor.code')
         ->whereNotNull('emp.emp_id')
         ->where('opduser.account_disable','=','N')
-        ->get()
-    /* $username = DB::connection('pgsql')->table('opduser')
-    ->leftJoin('officer', 'officer.officer_login_name', '=', 'opduser.loginname')
-    ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
-    ->leftJoin('emp', 'emp.emp_id', '=', 'officer.emp_id')->where('doctor.active', 'Y')
-    ->whereNotNull('emp.emp_id')
-    ->whereNotNull('officer.officer_doctor_code')
-    ->select('officer.officer_id', 'doctor.name', 'emp.emp_id')
-    ->get()) */)
+        ->get()) {{-- emp id --}}
     <div class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -159,7 +137,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="" action="{{ route('updateRepair') }}" method="POST">
+                    <form class="" action="{{ route('updateRepairHosxp') }}" method="POST">
                         @csrf
                         @method('post')
                         <div class="form-floating">
@@ -178,7 +156,8 @@
                                 aria-label="Floating label select example">
                                 <option value=""></option>
                                 @foreach ($en as $een)
-                                    <option value="{{ $een->id }}">{{ $een->engineer_name }}</option>
+                                    <option value="{{ $een->emp_id }}">{{ $een->emp_first_name }}
+                                        {{ $een->emp_last_name }}</option>
                                 @endforeach
                             </select>
                             <label for="apparv_emp">ประเมินซ่อม (ช่างซ่อม)</label>
@@ -198,17 +177,22 @@
                         <div class="form-floating mb-3">
                             <select class="form-select" id="status" name="status"
                                 aria-label="Floating label select example">
-                                {{ $sta = DB::table('status')->get() }}
+                                {{ $sta = DB::connection('pgsql')->table('inv_durable_good_repair_status')->get() }}
+                                <option value="">
+                                    -
+                                </option>
                                 @foreach ($sta as $status)
-                                    <option value="{{ $status->id }}">{{ $status->status_name }}</option>
+                                    <option value="{{ $status->inv_durable_good_rstatus_id }}">{{ $status->inv_durable_good_rstatus_name }}</option>
                                 @endforeach
                             </select>
                             <label for="status">สถานะส่งซ่อม (ช่างซ่อม)</label>
                         </div>
+
                         <div class="form-floating mb-3">
                             <textarea class="form-control" placeholder="ไม่บังคับ" name="detail" id="detail" style="height: 100px"></textarea>
                             <label for="status">รายละเอียด/หมายเหตุ (ช่างซ่อม)</label>
                         </div>
+
                         <div class="divider">
                             <div class="divider-text">
                                 สำหรับผู้แจ้ง
@@ -217,7 +201,7 @@
                         <div class="form-floating mb-3">
                             <select class="form-select" id="username" name="username"
                                 aria-label="Floating label select example">
-                                <option>
+                                <option value="">
                                     -
                                 </option>
                                 @foreach ($username as $usernames)
@@ -253,15 +237,7 @@
                             </select>
                             <label for="floatingSelect">คะแนน (สำหรับผู้แจ้งซ่อม)</label>
                         </div>
-                        <div class="mb-3" id="sign">
-                            <label class="" for="">เซ็นรับรอง (สำหรับผู้แจ้งซ่อม):</label>
-                            <br />
-                            <div id="sig"></div>
-                            <br />
-                            <button id="clear" class="btn btn-danger btn-sm">ลบ</button>
-                            <button id="disable" class="btn btn-info btn-sm">ปิดแก้ไข</button>
-                            <textarea id="signature64" name="signed" style="display: none"></textarea>
-                        </div>
+
 
                 </div>
                 <div class="modal-footer">
@@ -297,43 +273,8 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="{{ asset('uipack/signature/jquery-ui.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('uipack/signature/signature.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
-        integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
-    <script type="text/javascript">
-        //var x = document.getElementById("sign");
-        //x.style.display = "none";
-        $('#floatingSelect').on('change', function() {
-            if (this.value == 3) {} else {}
-
-        });
-        var sig = $('#sig').signature({
-            syncField: '#signature64',
-            syncFormat: 'PNG',
-            guideline: true,
-            guidelineOffset: 25,
-            guidelineIndent: 20,
-            guidelineColor: '#ff0000'
-        });
-
-
-        $('#disable').click(function(e) {
-            e.preventDefault();
-            var disable = $(this).text() === 'ปิดแก้ไข';
-            $(this).text(disable ? 'เปิดแก้ไข' : 'ปิดแก้ไข');
-            sig.signature(disable ? 'disable' : 'enable');
-        });
-
-
-        $('#clear').click(function(e) {
-            e.preventDefault();
-            sig.signature('clear');
-            $("#signature64").val('');
-        });
-    </script>
     <script>
         $(document).ready(function() {
             $('#username').select2({
@@ -346,12 +287,12 @@
                 $('#status').val($(this).attr('data-status'));
                 $('#repair_id').val($(this).attr('data-repair_id'));
                 $('#eval').val($(this).attr('data-evl_type'));
+                $('#detail').val($(this).attr('data-detail'));
                 $('#apparv_emp').val($(this).attr('data-apprv_emp_id'));
                 $('#score').val($(this).attr('data-score'));
-                $('#detail').val($(this).attr('data-detail'));
                 $('#username').val($(this).attr('data-rate')).trigger('change');
             });
-            $('#datatable1').DataTable({
+            $('#datatable250').DataTable({
                     fixedColumns: {
                         left: 2
                     },
@@ -360,16 +301,14 @@
                         data.search.search = "";
                     },
                     stateSaveCallback: function(settings, data) {
-                        localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(
-                            data))
+                        localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data))
                     },
                     stateLoadCallback: function(settings) {
-                        return JSON.parse(localStorage.getItem('DataTables_' + settings
-                            .sInstance))
+                        return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance))
                     },
                     initComplete: function() {
                         this.api()
-                            .columns([1, 2, 3, 4])
+                            .columns([2, 3, 6, 7])
                             .every(function() {
                                 var column = this;
                                 var select = $(
@@ -393,7 +332,7 @@
                             '#userstable_filter').on('click',
                             function() {
                                 $('.fter').val('');
-                                var table = $('#datatable1').DataTable();
+                                var table = $('#datatable250').DataTable();
                                 table.search('').columns().search('').draw();
 
                             });
@@ -427,7 +366,7 @@
                             "extend": 'excel',
                             "exportOptions": {
                                 "stripHtml": false,
-                                'columns': [1, 2, 3]
+                                'columns': [0, 2, 3, 4, 5, 6, 7, 8]
 
                             },
                             "charset": 'utf-8',
@@ -437,7 +376,7 @@
                             "extend": 'print',
                             "exportOptions": {
                                 "stripHtml": false,
-                                'columns': [1]
+                                'columns': [0, 2, 3, 4, 5, 6, 7, 8]
 
                             },
                             "charset": 'utf-8',

@@ -27,7 +27,7 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    แจ้งซ่อม
+                    ติดตามแจ้งซ่อม
                 </div>
             </div>
         </h5>
@@ -87,15 +87,16 @@
     ->select('officer.officer_id', 'doctor.name', 'emp.emp_id')
     ->get()) --}}
 @php(
-    $username = DB::connection('pgsql')->table('opduser')
-    ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
-    ->leftJoin('doctor', 'officer.officer_doctor_code', '=', 'doctor.code')
-    ->leftJoin('emp', 'doctor.cid', '=', 'emp.emp_cid')
-    ->where('doctor.active', 'Y')
-    ->whereNotNull('emp.emp_id')
-    ->whereNotNull('officer.officer_doctor_code')
-    ->select('officer.officer_id', 'doctor.name', 'emp.emp_id','opduser.loginname')
-    ->get())
+    $username = DB::connection('pgsql')->table('doctor')
+        ->select('opduser.loginname','emp.emp_id', 'doctor.name')
+        ->leftJoin('emp','doctor.cid','=','emp.emp_cid')
+        ->leftJoin('opduser','doctor.code','=','opduser.doctorcode')
+        ->where('doctor.active','=','Y')
+        ->whereNotNull('doctor.code')
+        ->whereNotNull('emp.emp_id')
+        ->where('opduser.account_disable','=','N')
+        ->get()
+    )
     <div class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

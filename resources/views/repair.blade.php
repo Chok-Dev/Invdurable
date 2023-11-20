@@ -27,7 +27,7 @@
         <h5 class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-primary fw-bold">
-                    แจ้งซ่อม
+                    ติดตามแจ้งซ่อม
                 </div>
             </div>
         </h5>
@@ -72,20 +72,15 @@
 
 
     @php(
-    $username = DB::connection('pgsql')->table('opduser')
-    ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
-    ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
-    ->leftJoin('emp', 'emp.emp_id', '=', 'officer.emp_id')
-    /* ->leftJoin('officer_group_list', 'officer_group_list.officer_id', '=', 'officer.officer_id') */
-    /* ->leftJoin('officer_department', 'officer_department.officer_id', '=', 'officer.officer_id') */
-    ->where('doctor.active', 'Y')
-    /* ->where('officer_department.depcode', '136') */
-    /* ->where('officer_group_list.officer_group_id', '56') */
-    ->whereNotNull('emp.emp_id')
-  /*   ->whereNotNull('doctor.position_id') */
-    ->whereNotNull('officer.officer_doctor_code')
-    ->select('officer.officer_id', 'doctor.name', 'emp.emp_id')
-    ->get())
+    $username =DB::connection('pgsql')->table('doctor')
+        ->select('opduser.loginname','emp.emp_id', 'doctor.name')
+        ->leftJoin('emp','doctor.cid','=','emp.emp_cid')
+        ->leftJoin('opduser','doctor.code','=','opduser.doctorcode')
+        ->where('doctor.active','=','Y')
+        ->whereNotNull('doctor.code')
+        ->whereNotNull('emp.emp_id')
+        ->where('opduser.account_disable','=','N')
+        ->get())
 
     {{-- <div class="modal fade" data-bs-backdrop="static" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">

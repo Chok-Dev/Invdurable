@@ -48,9 +48,10 @@ class FixController extends Controller
 
         DB::beginTransaction();
         try {
-            $ser = DB::table('com_service_list')->where('service_list_id','=',$request->service)->first();
-            $commo = DB::table('durable_goods')->where('id','=',$request->id)->first();
-            $user = DB::connection('pgsql')->table('opduser')
+            $ser = DB::table('com_service_list')->where('service_list_id', '=', $request->service)->first();
+            $commo = DB::table('durable_goods')->where('id', '=', $request->id)->first();
+
+            /* $user = DB::connection('pgsql')->table('opduser')
                 ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
                 ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
                 ->leftJoin('emp', 'emp.emp_cid', '=', 'doctor.cid')
@@ -58,9 +59,19 @@ class FixController extends Controller
                 ->where('doctor.active', 'Y')
                 ->whereNotNull('emp.emp_id')
                 ->whereNotNull('officer.officer_doctor_code')
-                ->select('doctor.name', 'opduser.loginname', 'emp.emp_id', 'emp.emp_dep_id')->first();
-            
-/* dd($user);  */
+                ->select('doctor.name', 'opduser.loginname', 'emp.emp_id', 'emp.emp_dep_id')->first(); */
+            $user = DB::connection('pgsql')->table('doctor')
+                ->select('opduser.loginname','emp.emp_id', 'doctor.name','emp.emp_dep_id')
+                ->leftJoin('emp', 'doctor.cid', '=', 'emp.emp_cid')
+                ->leftJoin('opduser', 'doctor.code', '=', 'opduser.doctorcode')
+                ->where('doctor.active', '=', 'Y')
+                ->whereNotNull('doctor.code')
+                ->whereNotNull('emp.emp_id')
+                ->where('opduser.loginname', $request->username)
+                ->where('opduser.account_disable', '=', 'N')
+                ->first();
+
+            /* dd($user);  */
             $com = DB::connection('pgsql')->table('inv_durable_good')
                 ->where('inv_durable_good_code', ($commo->durable_id == "-") ? $ser->v_id : $commo->durable_id)
                 ->select('inv_durable_good_id')->first();
@@ -73,6 +84,7 @@ class FixController extends Controller
             DB::connection('pgsql')->table('inv_durable_good_repair')->insert([
                 'inv_durable_good_repair_id' => $hosxpid,
                 'inv_durable_good_id' => $com->inv_durable_good_id,
+                'inv_durable_rate_after_coment' => 'web',
                 'inv_durable_good_repair_date' => date("Y-m-d"),
                 'last_update' => date("Y-m-d"),
                 'emp_id' =>  $user->emp_id,
@@ -85,7 +97,7 @@ class FixController extends Controller
                 'inv_durable_good_repair_dep_id' => 2,
             ]);
 
-            
+
             $savedata = DB::table('durable_fix')->insert([
                 'hos_repiar_id' => $hosxpid,
                 'solution' => $request->solu,
@@ -98,14 +110,13 @@ class FixController extends Controller
                 'created_at' => date("Y-m-d H:i:s"),
             ]);
             if ($savedata) {
-               
+
                 DB::commit();
                 alert()->success('สำเร็จ', 'บันทึกข้อมูลสำเร็จ.');
             } else {
                 alert()->error('ไม่สำเร็จ', 'บันทึกข้อมูลไม่สำเร็จ.');
             }
             return redirect()->route('fix');
-            
         } catch (\Exception $ex) {
             DB::rollback();
             alert()->error('ไม่สำเร็จ', 'บันทึกข้อมูลไม่สำเร็จ.');

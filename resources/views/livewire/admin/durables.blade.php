@@ -22,13 +22,15 @@
                     <thead>
                         <tr>
                             <th class="text-center">ลำดับ</th>
-                            <th class="text-center">ชื่อเครื่อง</th>
+                            <th class="text-center text-nowrap">จัดการ</th>
+                            <th class="text-center">รหัส</th>
+                            <th class="text-center">หมายเหตุ</th>
                             <th class="text-center text-nowrap">เลขครุภัณฑ์</th>
                             <th class="text-center text-nowrap">ประเภทครุภัณฑ์</th>
                             <th class="text-center text-nowrap">ปีที่ได้</th>
                             <th class="text-center text-nowrap">Anydesk</th>
                             <th class="text-center text-nowrap">หน่วยงาน</th>
-                            <th class="text-center text-nowrap">จัดการ</th>
+                            
                         </tr>
                     </thead>
 
@@ -36,12 +38,6 @@
                         @foreach ($data as $commo)
                             <tr class="text-nowrap">
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $commo->durable_name }}</td>
-                                <td>{{ $commo->durable_id }}</td>
-                                <td>{{ $commo->com_type_name }}</td>
-                                <td>{{ $commo->year_received }}</td>
-                                <td class="user-select-all">{{ $commo->anydesk_ip }}</td>
-                                <td>{{ $commo->inv_dep_name }}</td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                         <button wire:click="$dispatch('EditClick', { id: '{{ $commo->id }}'})"
@@ -52,6 +48,14 @@
                                             class="btn btn-danger btn-sm">ลบ</button>
                                     </div>
                                 </td>
+                                <td>{{ $commo->id }}</td>
+                                <td>{{ $commo->durable_name }}</td>
+                                <td>{{ $commo->durable_id }}</td>
+                                <td>{{ $commo->com_type_name }}</td>
+                                <td>{{ $commo->year_received }}</td>
+                                <td class="user-select-all">{{ $commo->anydesk_ip }}</td>
+                                <td>{{ $commo->inv_dep_name }}</td>
+                                
                             </tr>
                         @endforeach
                     </tbody>
@@ -117,7 +121,7 @@
                                 </span>
                             @enderror
                         </div>
-                        {{ $durable_name }}
+                       {{--  {{ $durable_name }} --}}
                         <div class="form-floating mb-3">
                             <input type="number" class="form-control" placeholder="" wire:model='durable_year'>
                             <label for="year" class="">ปีที่ได้รับ</label>
@@ -273,6 +277,7 @@
         });
         document.addEventListener('show-modal-edit', event => {
             $('#exampleModal2').modal('show');
+            
         });
         document.addEventListener('alert_success', event => {
             Swal.fire(
@@ -288,24 +293,9 @@
                 'error'
             )
         });
-        $('#ecomtype').select2({
-            dropdownParent: $('#exampleModal2'),
-            theme: 'bootstrap-5',
-        });
 
-        $('#ebuild').select2({
-            dropdownParent: $('#exampleModal2'),
-            theme: 'bootstrap-5',
-        });
-        $('#comtype').select2({
-            dropdownParent: $('#exampleModal'),
-            theme: 'bootstrap-5',
-        });
+        
 
-        $('#build').select2({
-            dropdownParent: $('#exampleModal'),
-            theme: 'bootstrap-5',
-        });
         document.addEventListener('close-modal', event => {
             $('#exampleModal').modal('hide');
             $('#exampleModal2').modal('hide');
@@ -313,6 +303,9 @@
         document.addEventListener('datatable', event => {
             $(document).ready(function() {
                 $('#datatable1').DataTable({
+                    fixedColumns: {
+                        left: 2
+                    },
                     stateSave: true,
                     "stateSaveParams": function(settings, data) {
                         data.search.search = "";
@@ -327,7 +320,7 @@
                     },
                     initComplete: function() {
                         this.api()
-                            .columns([3, 4, 6])
+                            .columns([5, 6, 8])
                             .every(function() {
                                 var column = this;
                                 var select = $(
