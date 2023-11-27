@@ -9,12 +9,12 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
-    <link  type="image/x-icon" href="{{ asset('uipack/assets/img/support.png') }}" />
     <meta name="description" content="" />
 
 
     <!-- Favicon -->
-    
+    <link rel="shortcut icon" href="{{ asset('uipack/assets/img/support.png') }}"  type="image/x-icon">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +64,7 @@
 </head>
 
 <body>
-    <!-- Layout wrapper -->
+    <!-- Layout wrapper ' or 1=1 or '  admin'or 1=1 or ''='  admin' or '1'='1  admin' or '1'='1'#-->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             <!-- Menu -->
@@ -75,7 +75,7 @@
                         <span class="app-brand-logo demo">
                             <img src="{{ asset('uipack/assets/img/support.png') }}" class="w-px-50 h-auto" alt="logo">
                         </span>
-                        <span class="app-brand-text fs-4 menu-text text-uppercase fw-bolder ms-2">Repair X</span>
+                        <span class="app-brand-text fs-4 menu-text text-uppercase fw-bolder ms-2">HelpDesk X</span>
                     </a>
 
                     <a href="javascript:void(0);"
