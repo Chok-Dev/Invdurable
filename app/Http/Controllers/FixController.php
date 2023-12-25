@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Phattarachai\LineNotify\Facade\Line;
 
 class FixController extends Controller
 {
@@ -46,11 +46,13 @@ class FixController extends Controller
             ]
         );
 
-        DB::beginTransaction();
-        try {
+       /*  DB::beginTransaction();
+        try { */
             $ser = DB::table('com_service_list')->where('service_list_id', '=', $request->service)->first();
-            $commo = DB::table('durable_goods')->where('id', '=', $request->id)->first();
-
+            $commo = DB::table('durable_goods')
+            ->leftJoin('inv_dep','durable_goods.inv_dep_id','=','inv_dep.inv_dep_id')
+            ->where('durable_goods.id', '=', $request->id)->first();
+/* dd($commo); */
             /* $user = DB::connection('pgsql')->table('opduser')
                 ->leftJoin('officer', 'opduser.loginname', '=', 'officer.officer_login_name')
                 ->leftJoin('doctor', 'doctor.code', '=', 'officer.officer_doctor_code')
@@ -74,10 +76,19 @@ class FixController extends Controller
             /* dd($user);  */
             $com = DB::connection('pgsql')->table('inv_durable_good')
                 ->where('inv_durable_good_code', ($commo->durable_id == "-") ? $ser->v_id : $commo->durable_id)
-                ->select('inv_durable_good_id')->first();
+                ->select('inv_durable_good_id','inv_durable_good_code')->first();
 
             $number = DB::connection('pgsql')->table('inv_durable_good_repair')
                 ->select('inv_durable_good_repair_id')->latest('inv_durable_good_repair_id')->first();
+
+/* dd($com); */
+            Line::send("
+เลขครุภัณฑ์: $com->inv_durable_good_code
+ชื่อผู้แจ้ง: $user->name
+หน่วยงาน: $commo->inv_dep_name
+เบอร์ติดต่อ: $request->tel
+สาเหตุ: $request->solu
+วันที่แจ้ง: ".date("Y-m-d H:i:s"));
 
             $hosxpid = (int) $number->inv_durable_good_repair_id + 1;
 
@@ -117,10 +128,10 @@ class FixController extends Controller
                 alert()->error('ไม่สำเร็จ', 'บันทึกข้อมูลไม่สำเร็จ.');
             }
             return redirect()->route('fix');
-        } catch (\Exception $ex) {
+       /*  } catch (\Exception $ex) {
             DB::rollback();
             alert()->error('ไม่สำเร็จ', 'บันทึกข้อมูลไม่สำเร็จ.');
             return redirect()->route('fix');
-        }
+        } */
     }
 }

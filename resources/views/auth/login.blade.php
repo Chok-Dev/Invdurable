@@ -156,12 +156,12 @@
                             </div>
                         </form>
 
-                        <p class="text-center">
+                        {{-- <p class="text-center">
                             <span>คุณยังไม่มีบัญชี?</span>
                             <a href="{{ route('register')}}">
                                 <span>สมัครเดี๋ยวนี้</span>
                             </a>
-                        </p>
+                        </p> --}}
                     </div>
                 </div>
                 <!-- /Register -->

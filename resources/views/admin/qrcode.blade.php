@@ -49,9 +49,11 @@
     {{-- {!! QrCode::size(50)->generate(url('fix?id=') . $data[0]->id) !!} --}}
     <table>
         <tr>
-            <td><img src="data:image/png;base64, {!! base64_encode(QrCode::eye('circle')->format('png')->size(500)->generate(url('fix',$data[0]->id))) !!} "></td>
-                {{-- /* QrCode::eye('circle')->format('png')->size(500)->generate(url('fix?id=') . $data[0]->id)) !!} "></td> */ --}}
-                
+            {{-- <td><img src="data:image/png;base64, {!! base64_encode(QrCode::eye('circle')->format('png')->size(500)->generate(url('fix',$data[0]->id))) !!} "></td> --}}
+                {{-- <td><img src="data:image/png;base64, {!! base64_encode(QrCode::size(500)->format('png')->wiFi(['encryption' => 'WPA/WEP','ssid' => 'nhh','password' => 'nonghan11018','hidden' => 'Whether the network is a hidden SSID or not.'])) !!} "></td> --}}
+
+              {{--   <td>  {!! QrCode::size(200)->wiFi(['encryption' => 'WPA/WEP','ssid' => 'nhh','password' => 'nonghan11018','hidden' => 'Whether the network is a hidden SSID or not.']); !!} </td>  --}}
+            <td><img src="data:image/png;base64, {!! base64_encode(QrCode::eye('circle')->format('png')->size(500)->generate('https://repair.nonghanhospital.go.th/fix/'.$data[0]->id)) !!} "></td>
             <td class="px-1">
                 <p class="text-nowrap mb-1" style="font-size: 12px;font-weight: bold;">รหัส: {{ $data[0]->id }}</p>
                 <p class="text-nowrap mb-1" style="font-size: 12px;font-weight: bold;">เลขครุภัณฑ์:

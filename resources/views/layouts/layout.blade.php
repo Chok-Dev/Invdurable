@@ -119,7 +119,7 @@
                     <li class="menu-item @if (request()->routeIs('repair')) active @endif">
                         <a href="{{ route('repair') }}" class="menu-link ">
                             <i class='menu-icon tf-icons bx bx-laptop'></i>
-                            <div data-i18n="Basic">แจ้งซ่อมครุภัณฑ์</div>
+                            <div data-i18n="Basic">แจ้งซ่อมครุภัณฑ์ (Web)</div>
                             @empty($notify)
                             @else
                             <div class="badge bg-danger rounded-pill ms-auto"><i class='bx bxs-bell-ring bx-tada bx-xs'></i> {{ $notify }}</div>
@@ -321,7 +321,7 @@
                                 </script>
                                 , made with ❤️ by
                                 <a href="https://themeselection.com" target="_blank"
-                                    class="footer-link fw-bolder">Jaroenrach</a>
+                                    class="footer-link fw-bolder">Jaroenrach Lisri</a>
                             </div>
                             <div>
                                 {{-- <a href="https://themeselection.com/license/" class="footer-link me-4"
